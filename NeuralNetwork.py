@@ -10,7 +10,7 @@ def relu_derivative(X):
     return 1/(1+np.exp(-X))
 
 class NeuralNetwork:
-    def __init__(self, x, y, nodes, iterations):
+    def __init__(self, x, y, nodes, iterations, maxes):
         """
         Neural Network class
         self.input      = x = np.array() with the X values
@@ -22,6 +22,7 @@ class NeuralNetwork:
         """
         np.random.seed(20)
         self.input      = x
+        self.maxes      = maxes
         self.weights1   = np.random.rand(self.input.shape[1], nodes) 
         self.weights2   = np.random.rand(nodes,5)                 
         self.y          = y
@@ -51,12 +52,47 @@ class NeuralNetwork:
         Also a `self.loss_list` list will be made, wich contains a list of the `self.loss` value for each iteration.
         """
         self.loss_list = []
-        for i in range(self.iterations):
+        for _ in range(self.iterations):
             self.feedforward()
             self.backprop()
             self.loss =((self.y-self.output)**2).sum()
             self.loss_list.append(self.loss)
 
+    def estimate(self, values):
+        """
+        Receives an input of gases; it can be a list, dictionary or numpy array but must be sorted as:
+        ["H2","CH4","C2H6","C2H2","CO","CO2"]
+
+        {
+            "PD"  : 23,
+            "D1"  : 75,
+            "D2"  : 50,
+            "T1y2": 1,
+            "T3"  : 2
+        }
+        Then it returns a dictionary with the estimated values, in the form of:
+        """
+        faults = {
+            0: "PD",
+            1: "D1",
+            2: "D2",
+            3: "T1y2",
+            4: "T3"
+        }
+
+        for i,gas in enumerate(self.maxes.keys()):
+            values[i] = values[i]/self.maxes[gas]
+
+        gases = np.array(values)
+        self.input = gases
+        self.feedforward()
+
+        estimates = dict()
+        for i in range(len(self.output)):
+            estimates[i] = round(self.output[i]*100,2)
+            estimates[faults[i]] = estimates.pop(i)
+        return estimates
+        
     def results(self, df, keys):
         # Tags of keys that are analyzed
         keys_y = keys

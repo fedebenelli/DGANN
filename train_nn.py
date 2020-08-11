@@ -41,11 +41,10 @@ Y = np.array(new_Y)
 # Train
 iterations = 487300
 nodes = 50
-nn    = NeuralNetwork(X, Y, nodes, iterations)
+nn    = NeuralNetwork(X, Y, nodes, iterations, maxes)
 nn.train()
-nn.results(df,gasesf)
+nn.results(df, gasesf)
 
-with open('nn92.obj','wb') as w:
+# Save the Neural Network for later use
+with open('nn.obj','wb') as w:
     pickle.dump(nn,w)
-with open('maxes.obj','wb') as w:
-    pickle.dump(maxes,w)

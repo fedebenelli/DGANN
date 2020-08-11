@@ -1,6 +1,10 @@
-﻿import pandas as pd
-import tabula
+﻿# Script to extract the data from a PDF document
+#  
 
+import pandas as pd
+import numpy as np
+import tabula
+import re
 filename = 'DGA.pdf'
 tables = tabula.read_pdf(filename,pages='all',stream=False,lattice=True)
 
@@ -33,4 +37,4 @@ df = df.replace('Discharges of High Energy ( D2 )',2)
 df = df.replace('Thermal Faults < 700 C (T1 and T2)',3)
 df = df.replace('Thermal Faults > 700 °C (T3)',4)
 
-df.to_excel('data.xlsx')
+df.to_csv('data.csv')
