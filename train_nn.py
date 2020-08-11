@@ -1,9 +1,11 @@
 import matplotlib.pylab as plt
 from NeuralNetwork import *
+from time import time
 import seaborn as sns
 import pandas as pd
 import numpy as np
 import pickle
+
 
 # Clasification variables
 faults = {0:"PD",1: "D1",2: "D2",3:"T12",4:"T3"}
@@ -12,8 +14,7 @@ gasesf = ["H2","CH4","C2H4","C2H6","C2H2","CO","CO2",'fault']
 
 df = pd.read_excel('data.xlsx')[gasesf]
 
-# Normalize data
-# Give the gases a log10 scale
+# Normalize data, all the data will be divided by the max value (this approach gave the best results)
 maxes = dict()
 for gas in gases:
     maxes[gas] = df[gas].max()
@@ -39,11 +40,15 @@ for i in Y:
 Y = np.array(new_Y)
 
 # Train
+print('Trainining the Neural Network!')
+now = time()
 iterations = 487300
 nodes = 50
 nn    = NeuralNetwork(X, Y, nodes, iterations, maxes)
 nn.train()
 nn.results(df, gasesf)
+
+print('Trained in {} s'.format(time() - now))
 
 # Save the Neural Network for later use
 with open('nn.obj','wb') as w:
