@@ -14,11 +14,11 @@ Script used to train the Neural Network, after it ends training it shows two pic
 
 The first one shows the loss value for each iteration
 
-[](convergence.svg)
+[](./convergence.svg)
 
 The second one shows the correlation between the real data (y axis) and predicted data on the NN (x axis)
 
-[](precision.svg)
+[](./precision.svg)
 
 ## `predict_nn.py`
 Main program script that loads the `nn.obj` object and then it asks the user for data to load and returns a dictionary with the estimated probability for each fault.
