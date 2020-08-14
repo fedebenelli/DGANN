@@ -1,18 +1,20 @@
+from modules.NeuralNetwork import NeuralNetwork,relu,relu_derivative
 import matplotlib.pylab as plt
-from NeuralNetwork import *
 from time import time
 import seaborn as sns
 import pandas as pd
 import numpy as np
 import pickle
 
+data_path = './data'
+images_path = './images'
 
 # Clasification variables
 faults = {0:"PD",1: "D1",2: "D2",3:"T12",4:"T3"}
 gases = ["H2","CH4","C2H4","C2H6","C2H2","CO","CO2"]
 gasesf = ["H2","CH4","C2H4","C2H6","C2H2","CO","CO2",'fault']
 
-df = pd.read_excel('data.xlsx')[gasesf]
+df = pd.read_excel(f'{data_path}/data.xlsx')[gasesf]
 
 # Normalize data, all the data will be divided by the max value (this approach gave the best results)
 maxes = dict()
